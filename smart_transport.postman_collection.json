@@ -1,8 +1,8 @@
 {
   "info": {
     "name": "Smart Transport API",
-    "_postman_id": "12345678-abcd-efgh-ijkl-1234567890ab",
-    "description": "Postman Collection for Smart Transport API (Auth, Customer, Driver, Station, Payments, Earnings).",
+    "_postman_id": "b01a6e55-cc11-42f2-bc2b-xyz123456789",
+    "description": "Postman Collection for Smart Transport API (Laravel)",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -13,12 +13,14 @@
           "name": "Register",
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"CustA\",\n  \"email\": \"custa@example.com\",\n  \"phone\": \"0551000001\",\n  \"password\": \"password\",\n  \"role\": \"customer\"\n}"
+              "raw": "{\n  \"name\": \"CustA\",\n  \"email\": \"custa@example.com\",\n  \"phone\": \"0551000001\",\n  \"password\": \"123456\",\n  \"password_confirmation\": \"123456\",\n  \"role\": \"customer\"\n}"
             },
-            "url": { "raw": "{{base_url}}/api/auth/register", "host": ["{{base_url}}"], "path": ["api","auth","register"] }
+            "url": { "raw": "{{base_url}}/api/auth/register", "host": ["{{base_url}}"], "path": ["api", "auth", "register"] }
           }
         },
         {
@@ -28,9 +30,9 @@
             "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"custa@example.com\",\n  \"password\": \"password\"\n}"
+              "raw": "{\n  \"email\": \"custa@example.com\",\n  \"password\": \"123456\"\n}"
             },
-            "url": { "raw": "{{base_url}}/api/auth/login", "host": ["{{base_url}}"], "path": ["api","auth","login"] }
+            "url": { "raw": "{{base_url}}/api/auth/login", "host": ["{{base_url}}"], "path": ["api", "auth", "login"] }
           }
         },
         {
@@ -38,7 +40,7 @@
           "request": {
             "method": "GET",
             "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
-            "url": { "raw": "{{base_url}}/api/auth/profile", "host": ["{{base_url}}"], "path": ["api","auth","profile"] }
+            "url": { "raw": "{{base_url}}/api/auth/profile", "host": ["{{base_url}}"], "path": ["api", "auth", "profile"] }
           }
         },
         {
@@ -49,11 +51,8 @@
               { "key": "Authorization", "value": "Bearer {{token}}" },
               { "key": "Content-Type", "value": "application/json" }
             ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"name\": \"CustA Updated\",\n  \"region\": \"batna\"\n}"
-            },
-            "url": { "raw": "{{base_url}}/api/auth/update-profile", "host": ["{{base_url}}"], "path": ["api","auth","update-profile"] }
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"CustA Updated\",\n  \"region\": \"Batna\"\n}" },
+            "url": { "raw": "{{base_url}}/api/auth/update-profile", "host": ["{{base_url}}"], "path": ["api", "auth", "update-profile"] }
           }
         }
       ]
@@ -62,7 +61,7 @@
       "name": "Customer",
       "item": [
         {
-          "name": "Create Order",
+          "name": "Create Order (Parcel)",
           "request": {
             "method": "POST",
             "header": [
@@ -71,17 +70,32 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"pickup_address\": \"Batna\",\n  \"dropoff_address\": \"Oran\",\n  \"package_type\": \"small\",\n  \"price\": 500\n}"
+              "raw": "{\n  \"type\": \"parcel\",\n  \"pickup_location\": \"Batna\",\n  \"dropoff_location\": \"Oran\",\n  \"price\": 1500,\n  \"package_type\": \"small\"\n}"
             },
-            "url": { "raw": "{{base_url}}/api/customer/orders", "host": ["{{base_url}}"], "path": ["api","customer","orders"] }
+            "url": { "raw": "{{base_url}}/api/customer/orders", "host": ["{{base_url}}"], "path": ["api", "customer", "orders"] }
           }
         },
         {
-          "name": "List Orders",
+          "name": "Create Order (Ride)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"ride\",\n  \"pickup_location\": \"Batna\",\n  \"dropoff_location\": \"Setif\",\n  \"price\": 800,\n  \"passenger_count\": 2\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/customer/orders", "host": ["{{base_url}}"], "path": ["api", "customer", "orders"] }
+          }
+        },
+        {
+          "name": "My Orders",
           "request": {
             "method": "GET",
             "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
-            "url": { "raw": "{{base_url}}/api/customer/orders", "host": ["{{base_url}}"], "path": ["api","customer","orders"] }
+            "url": { "raw": "{{base_url}}/api/customer/orders", "host": ["{{base_url}}"], "path": ["api", "customer", "orders"] }
           }
         }
       ]
@@ -94,47 +108,15 @@
           "request": {
             "method": "GET",
             "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
-            "url": { "raw": "{{base_url}}/api/driver/orders", "host": ["{{base_url}}"], "path": ["api","driver","orders"] }
+            "url": { "raw": "{{base_url}}/api/driver/orders", "host": ["{{base_url}}"], "path": ["api", "driver", "orders"] }
           }
         },
         {
           "name": "Accept Order",
           "request": {
             "method": "POST",
-            "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" },
-              { "key": "Content-Type", "value": "application/json" }
-            ],
-            "url": { "raw": "{{base_url}}/api/driver/orders/1/accept", "host": ["{{base_url}}"], "path": ["api","driver","orders","1","accept"] }
-          }
-        },
-        {
-          "name": "Driver Earnings",
-          "request": {
-            "method": "GET",
             "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
-            "url": { "raw": "{{base_url}}/api/driver/earnings", "host": ["{{base_url}}"], "path": ["api","driver","earnings"] }
-          }
-        },
-        {
-          "name": "Earnings Summary",
-          "request": {
-            "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
-            "url": { "raw": "{{base_url}}/api/driver/earnings/summary", "host": ["{{base_url}}"], "path": ["api","driver","earnings","summary"] }
-          }
-        }
-      ]
-    },
-    {
-      "name": "Station",
-      "item": [
-        {
-          "name": "List Parcels",
-          "request": {
-            "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
-            "url": { "raw": "{{base_url}}/api/station/parcels", "host": ["{{base_url}}"], "path": ["api","station","parcels"] }
+            "url": { "raw": "{{base_url}}/api/driver/orders/1/accept", "host": ["{{base_url}}"], "path": ["api", "driver", "orders", "1", "accept"] }
           }
         }
       ]
@@ -150,11 +132,29 @@
               { "key": "Authorization", "value": "Bearer {{token}}" },
               { "key": "Content-Type", "value": "application/json" }
             ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"order_id\": 1,\n  \"amount\": 500,\n  \"method\": \"cash\"\n}"
-            },
-            "url": { "raw": "{{base_url}}/api/payments/record", "host": ["{{base_url}}"], "path": ["api","payments","record"] }
+            "body": { "mode": "raw", "raw": "{\n  \"order_id\": 1,\n  \"amount\": 1500\n}" },
+            "url": { "raw": "{{base_url}}/api/payments/record", "host": ["{{base_url}}"], "path": ["api", "payments", "record"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Earnings",
+      "item": [
+        {
+          "name": "Driver Earnings",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{base_url}}/api/earnings", "host": ["{{base_url}}"], "path": ["api", "earnings"] }
+          }
+        },
+        {
+          "name": "Earnings Summary",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{base_url}}/api/earnings/summary", "host": ["{{base_url}}"], "path": ["api", "earnings", "summary"] }
           }
         }
       ]
