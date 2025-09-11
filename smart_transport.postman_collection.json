@@ -1,8 +1,8 @@
 {
   "info": {
     "name": "Smart Transport API",
-    "_postman_id": "b01a6e55-cc11-42f2-bc2b-xyz123456789",
-    "description": "Postman Collection for Smart Transport API (Laravel)",
+    "_postman_id": "12345678-90ab-cdef-1234-567890abcdef",
+    "description": "Postman collection for Smart Transport API",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -13,46 +13,43 @@
           "name": "Register",
           "request": {
             "method": "POST",
-            "header": [
-              { "key": "Content-Type", "value": "application/json" }
-            ],
+            "header": [],
+            "url": "{{base_url}}/api/auth/register",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"CustA\",\n  \"email\": \"custa@example.com\",\n  \"phone\": \"0551000001\",\n  \"password\": \"123456\",\n  \"password_confirmation\": \"123456\",\n  \"role\": \"customer\"\n}"
-            },
-            "url": { "raw": "{{base_url}}/api/auth/register", "host": ["{{base_url}}"], "path": ["api", "auth", "register"] }
+              "raw": "{\n  \"name\": \"CustA\",\n  \"email\": \"custa@example.com\",\n  \"phone\": \"0551000001\",\n  \"password\": \"12345678\",\n  \"role\": \"customer\"\n}"
+            }
           }
         },
         {
           "name": "Login",
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_url}}/api/auth/login",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"custa@example.com\",\n  \"password\": \"123456\"\n}"
-            },
-            "url": { "raw": "{{base_url}}/api/auth/login", "host": ["{{base_url}}"], "path": ["api", "auth", "login"] }
+              "raw": "{\n  \"email\": \"custa@example.com\",\n  \"password\": \"12345678\"\n}"
+            }
           }
         },
         {
           "name": "Profile",
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
-            "url": { "raw": "{{base_url}}/api/auth/profile", "host": ["{{base_url}}"], "path": ["api", "auth", "profile"] }
+            "url": "{{base_url}}/api/auth/profile",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }]
           }
         },
         {
           "name": "Update Profile",
           "request": {
             "method": "POST",
-            "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" },
-              { "key": "Content-Type", "value": "application/json" }
-            ],
-            "body": { "mode": "raw", "raw": "{\n  \"name\": \"CustA Updated\",\n  \"region\": \"Batna\"\n}" },
-            "url": { "raw": "{{base_url}}/api/auth/update-profile", "host": ["{{base_url}}"], "path": ["api", "auth", "update-profile"] }
+            "url": "{{base_url}}/api/auth/update-profile",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"region\": \"Batna\"\n}"
+            }
           }
         }
       ]
@@ -61,41 +58,31 @@
       "name": "Customer",
       "item": [
         {
-          "name": "Create Order (Parcel)",
+          "name": "Create Order",
           "request": {
             "method": "POST",
-            "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" },
-              { "key": "Content-Type", "value": "application/json" }
-            ],
+            "url": "{{base_url}}/api/customer/orders",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"type\": \"parcel\",\n  \"pickup_location\": \"Batna\",\n  \"dropoff_location\": \"Oran\",\n  \"price\": 1500,\n  \"package_type\": \"small\"\n}"
-            },
-            "url": { "raw": "{{base_url}}/api/customer/orders", "host": ["{{base_url}}"], "path": ["api", "customer", "orders"] }
+              "raw": "{\n  \"type\": \"ride\",\n  \"pickup_location\": \"Batna Center\",\n  \"dropoff_location\": \"Setif\",\n  \"price\": 800,\n  \"passenger_count\": 1\n}"
+            }
           }
         },
         {
-          "name": "Create Order (Ride)",
-          "request": {
-            "method": "POST",
-            "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" },
-              { "key": "Content-Type", "value": "application/json" }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"type\": \"ride\",\n  \"pickup_location\": \"Batna\",\n  \"dropoff_location\": \"Setif\",\n  \"price\": 800,\n  \"passenger_count\": 2\n}"
-            },
-            "url": { "raw": "{{base_url}}/api/customer/orders", "host": ["{{base_url}}"], "path": ["api", "customer", "orders"] }
-          }
-        },
-        {
-          "name": "My Orders",
+          "name": "List Orders",
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
-            "url": { "raw": "{{base_url}}/api/customer/orders", "host": ["{{base_url}}"], "path": ["api", "customer", "orders"] }
+            "url": "{{base_url}}/api/customer/orders",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }]
+          }
+        },
+        {
+          "name": "Cancel Order",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/customer/orders/1/cancel",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }]
           }
         }
       ]
@@ -107,54 +94,52 @@
           "name": "Available Orders",
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
-            "url": { "raw": "{{base_url}}/api/driver/orders", "host": ["{{base_url}}"], "path": ["api", "driver", "orders"] }
+            "url": "{{base_url}}/api/driver/orders",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }]
           }
         },
         {
           "name": "Accept Order",
           "request": {
             "method": "POST",
-            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
-            "url": { "raw": "{{base_url}}/api/driver/orders/1/accept", "host": ["{{base_url}}"], "path": ["api", "driver", "orders", "1", "accept"] }
-          }
-        }
-      ]
-    },
-    {
-      "name": "Payments",
-      "item": [
-        {
-          "name": "Record Payment",
-          "request": {
-            "method": "POST",
-            "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" },
-              { "key": "Content-Type", "value": "application/json" }
-            ],
-            "body": { "mode": "raw", "raw": "{\n  \"order_id\": 1,\n  \"amount\": 1500\n}" },
-            "url": { "raw": "{{base_url}}/api/payments/record", "host": ["{{base_url}}"], "path": ["api", "payments", "record"] }
-          }
-        }
-      ]
-    },
-    {
-      "name": "Earnings",
-      "item": [
-        {
-          "name": "Driver Earnings",
-          "request": {
-            "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
-            "url": { "raw": "{{base_url}}/api/earnings", "host": ["{{base_url}}"], "path": ["api", "earnings"] }
+            "url": "{{base_url}}/api/driver/orders/1/accept",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }]
           }
         },
         {
-          "name": "Earnings Summary",
+          "name": "Update Status → On the way",
           "request": {
-            "method": "GET",
+            "method": "POST",
+            "url": "{{base_url}}/api/driver/orders/1/status",
             "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
-            "url": { "raw": "{{base_url}}/api/earnings/summary", "host": ["{{base_url}}"], "path": ["api", "earnings", "summary"] }
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"on_the_way\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Update Status → In Progress",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/driver/orders/1/status",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"in_progress\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Update Status → Completed",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/driver/orders/1/status",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"completed\"\n}"
+            }
           }
         }
       ]
