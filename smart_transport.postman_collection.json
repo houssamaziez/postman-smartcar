@@ -1,8 +1,8 @@
 {
   "info": {
-    "name": "Smart Transport API",
+    "name": "Delivery & Ride App API",
     "_postman_id": "12345678-90ab-cdef-1234-567890abcdef",
-    "description": "Postman collection for Smart Transport API",
+    "description": "Postman collection for Delivery & Ride App API endpoints",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -13,140 +13,78 @@
           "name": "Register",
           "request": {
             "method": "POST",
-            "header": [],
-            "url": "{{base_url}}/api/auth/register",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"CustA\",\n  \"email\": \"custa@example.com\",\n  \"phone\": \"0551000001\",\n  \"password\": \"12345678\",\n  \"role\": \"customer\"\n}"
-            }
+              "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"user@test.com\",\n  \"password\": \"12345678\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/auth/register", "host": ["{{base_url}}"], "path": ["api","auth","register"] }
           }
         },
         {
           "name": "Login",
           "request": {
             "method": "POST",
-            "url": "{{base_url}}/api/auth/login",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"custa@example.com\",\n  \"password\": \"12345678\"\n}"
-            }
+              "raw": "{\n  \"email\": \"user@test.com\",\n  \"password\": \"12345678\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/auth/login", "host": ["{{base_url}}"], "path": ["api","auth","login"] }
           }
         },
-        {
-          "name": "Profile",
-          "request": {
-            "method": "GET",
-            "url": "{{base_url}}/api/auth/profile",
-            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }]
-          }
-        },
-        {
-          "name": "Update Profile",
-          "request": {
-            "method": "POST",
-            "url": "{{base_url}}/api/auth/update-profile",
-            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"region\": \"Batna\"\n}"
-            }
-          }
-        }
+        { "name": "Profile", "request": { "method": "GET", "url": { "raw": "{{base_url}}/api/auth/profile", "host": ["{{base_url}}"], "path": ["api","auth","profile"] } } },
+        { "name": "Update Profile", "request": { "method": "POST", "url": { "raw": "{{base_url}}/api/auth/update-profile", "host": ["{{base_url}}"], "path": ["api","auth","update-profile"] } } },
+        { "name": "Change Password", "request": { "method": "POST", "url": { "raw": "{{base_url}}/api/auth/change-password", "host": ["{{base_url}}"], "path": ["api","auth","change-password"] } } },
+        { "name": "Logout", "request": { "method": "POST", "url": { "raw": "{{base_url}}/api/auth/logout", "host": ["{{base_url}}"], "path": ["api","auth","logout"] } } },
+        { "name": "Logout All", "request": { "method": "POST", "url": { "raw": "{{base_url}}/api/auth/logout-all", "host": ["{{base_url}}"], "path": ["api","auth","logout-all"] } } }
       ]
     },
     {
       "name": "Customer",
       "item": [
-        {
-          "name": "Create Order",
-          "request": {
-            "method": "POST",
-            "url": "{{base_url}}/api/customer/orders",
-            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"type\": \"ride\",\n  \"pickup_location\": \"Batna Center\",\n  \"dropoff_location\": \"Setif\",\n  \"price\": 800,\n  \"passenger_count\": 1\n}"
-            }
-          }
-        },
-        {
-          "name": "List Orders",
-          "request": {
-            "method": "GET",
-            "url": "{{base_url}}/api/customer/orders",
-            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }]
-          }
-        },
-        {
-          "name": "Cancel Order",
-          "request": {
-            "method": "POST",
-            "url": "{{base_url}}/api/customer/orders/1/cancel",
-            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }]
-          }
-        }
+        { "name": "Create Order", "request": { "method": "POST", "url": { "raw": "{{base_url}}/api/customer/orders", "host": ["{{base_url}}"], "path": ["api","customer","orders"] } } },
+        { "name": "Create Scheduled Order", "request": { "method": "POST", "url": { "raw": "{{base_url}}/api/customer/orders/scheduled", "host": ["{{base_url}}"], "path": ["api","customer","orders","scheduled"] } } },
+        { "name": "List Orders", "request": { "method": "GET", "url": { "raw": "{{base_url}}/api/customer/orders", "host": ["{{base_url}}"], "path": ["api","customer","orders"] } } },
+        { "name": "Show Order", "request": { "method": "GET", "url": { "raw": "{{base_url}}/api/customer/orders/:id", "host": ["{{base_url}}"], "path": ["api","customer","orders",":id"] } } },
+        { "name": "Cancel Order", "request": { "method": "POST", "url": { "raw": "{{base_url}}/api/customer/orders/:id/cancel", "host": ["{{base_url}}"], "path": ["api","customer","orders",":id","cancel"] } } },
+        { "name": "Rate Order", "request": { "method": "POST", "url": { "raw": "{{base_url}}/api/customer/orders/:id/rate", "host": ["{{base_url}}"], "path": ["api","customer","orders",":id","rate"] } } }
       ]
     },
     {
       "name": "Driver",
       "item": [
-        {
-          "name": "Available Orders",
-          "request": {
-            "method": "GET",
-            "url": "{{base_url}}/api/driver/orders",
-            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }]
-          }
-        },
-        {
-          "name": "Accept Order",
-          "request": {
-            "method": "POST",
-            "url": "{{base_url}}/api/driver/orders/1/accept",
-            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }]
-          }
-        },
-        {
-          "name": "Update Status → On the way",
-          "request": {
-            "method": "POST",
-            "url": "{{base_url}}/api/driver/orders/1/status",
-            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"status\": \"on_the_way\"\n}"
-            }
-          }
-        },
-        {
-          "name": "Update Status → In Progress",
-          "request": {
-            "method": "POST",
-            "url": "{{base_url}}/api/driver/orders/1/status",
-            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"status\": \"in_progress\"\n}"
-            }
-          }
-        },
-        {
-          "name": "Update Status → Completed",
-          "request": {
-            "method": "POST",
-            "url": "{{base_url}}/api/driver/orders/1/status",
-            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"status\": \"completed\"\n}"
-            }
-          }
-        }
+        { "name": "Available Orders", "request": { "method": "GET", "url": { "raw": "{{base_url}}/api/driver/orders", "host": ["{{base_url}}"], "path": ["api","driver","orders"] } } },
+        { "name": "Accept Order", "request": { "method": "POST", "url": { "raw": "{{base_url}}/api/driver/orders/:id/accept", "host": ["{{base_url}}"], "path": ["api","driver","orders",":id","accept"] } } },
+        { "name": "Update Status (DriverController)", "request": { "method": "POST", "url": { "raw": "{{base_url}}/api/driver/update-status", "host": ["{{base_url}}"], "path": ["api","driver","update-status"] } } },
+        { "name": "Update Status (OrderController)", "request": { "method": "POST", "url": { "raw": "{{base_url}}/api/driver/orders/:id/status", "host": ["{{base_url}}"], "path": ["api","driver","orders",":id","status"] } } },
+        { "name": "Available Parcels", "request": { "method": "GET", "url": { "raw": "{{base_url}}/api/driver/parcels", "host": ["{{base_url}}"], "path": ["api","driver","parcels"] } } },
+        { "name": "Nearby Requests", "request": { "method": "GET", "url": { "raw": "{{base_url}}/api/driver/requests", "host": ["{{base_url}}"], "path": ["api","driver","requests"] } } }
+      ]
+    },
+    {
+      "name": "Station",
+      "item": [
+        { "name": "List Parcels", "request": { "method": "GET", "url": { "raw": "{{base_url}}/api/station/parcels", "host": ["{{base_url}}"], "path": ["api","station","parcels"] } } },
+        { "name": "Confirm Receive", "request": { "method": "POST", "url": { "raw": "{{base_url}}/api/station/confirm", "host": ["{{base_url}}"], "path": ["api","station","confirm"] } } },
+        { "name": "Assign Driver", "request": { "method": "POST", "url": { "raw": "{{base_url}}/api/station/assign-driver", "host": ["{{base_url}}"], "path": ["api","station","assign-driver"] } } }
+      ]
+    },
+    {
+      "name": "Payments",
+      "item": [
+        { "name": "Record Payment", "request": { "method": "POST", "url": { "raw": "{{base_url}}/api/payments/record", "host": ["{{base_url}}"], "path": ["api","payments","record"] } } }
+      ]
+    },
+    {
+      "name": "Earnings",
+      "item": [
+        { "name": "List Earnings", "request": { "method": "GET", "url": { "raw": "{{base_url}}/api/earnings", "host": ["{{base_url}}"], "path": ["api","earnings"] } } },
+        { "name": "Earnings Summary", "request": { "method": "GET", "url": { "raw": "{{base_url}}/api/earnings/summary", "host": ["{{base_url}}"], "path": ["api","earnings","summary"] } } }
       ]
     }
   ],
   "variable": [
-    { "key": "base_url", "value": "http://127.0.0.1:8000" },
-    { "key": "token", "value": "" }
+    { "key": "base_url", "value": "http://127.0.0.1:8000" }
   ]
 }
