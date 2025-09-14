@@ -1,94 +1,218 @@
 {
   "info": {
-    "name": "Smart Transport API",
-    "_postman_id": "d2a8e8d1-1234-4d9f-bb22-999999999999",
-    "description": "Postman collection for Smart Transport API (Customer, Driver, Station, Admin, Support, Payments, Earnings, Notifications).",
+    "name": "🚖 Smart Transport API",
+    "_postman_id": "b7713c0e-ef55-4d0d-8ee9-123456789abc",
+    "description": "Professional Postman Collection for Smart Transport API (Auth, Customer, Driver, Station, Payments, Earnings, Support, Admin, Notifications).",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{authToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://127.0.0.1:8000/api" },
+    { "key": "authToken", "value": "" }
+  ],
   "item": [
     {
       "name": "Auth",
       "item": [
-        { "name": "Register", "request": { "method": "POST", "url": "/api/auth/register" }},
-        { "name": "Login", "request": { "method": "POST", "url": "/api/auth/login" }},
-        { "name": "Profile", "request": { "method": "GET", "url": "/api/auth/profile" }},
-        { "name": "Update Profile", "request": { "method": "POST", "url": "/api/auth/update-profile" }},
-        { "name": "Change Password", "request": { "method": "POST", "url": "/api/auth/change-password" }},
-        { "name": "Logout", "request": { "method": "POST", "url": "/api/auth/logout" }},
-        { "name": "Logout All", "request": { "method": "POST", "url": "/api/auth/logout-all" }}
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "{{baseUrl}}/auth/register",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"password\": \"12345678\",\n  \"password_confirmation\": \"12345678\",\n  \"role\": \"customer\"\n}"
+            },
+            "description": "Register new user (customer/driver/station/admin)."
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"john@example.com\",\n  \"password\": \"12345678\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Profile",
+          "request": { "method": "GET", "url": "{{baseUrl}}/auth/profile" }
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/update-profile",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated John\",\n  \"phone\": \"+213700000000\"\n}"
+            }
+          }
+        },
+        { "name": "Change Password", "request": { "method": "POST", "url": "{{baseUrl}}/auth/change-password" } },
+        { "name": "Logout", "request": { "method": "POST", "url": "{{baseUrl}}/auth/logout" } },
+        { "name": "Logout All", "request": { "method": "POST", "url": "{{baseUrl}}/auth/logout-all" } }
       ]
     },
     {
       "name": "Customer",
       "item": [
-        { "name": "Create Order", "request": { "method": "POST", "url": "/api/customer/orders" }},
-        { "name": "Create Scheduled Order (جديد)", "request": { "method": "POST", "url": "/api/customer/orders/scheduled" }},
-        { "name": "My Orders", "request": { "method": "GET", "url": "/api/customer/orders" }},
-        { "name": "Order Details", "request": { "method": "GET", "url": "/api/customer/orders/:id" }},
-        { "name": "Cancel Order", "request": { "method": "POST", "url": "/api/customer/orders/:id/cancel" }},
-        { "name": "Rate Order (جديد)", "request": { "method": "POST", "url": "/api/customer/orders/:id/rate" }}
+        {
+          "name": "Create Order",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/customer/orders",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pickup_location\": \"Algiers Center\",\n  \"dropoff_location\": \"Oran\",\n  \"type\": \"parcel\",\n  \"price\": 1500\n}"
+            }
+          }
+        },
+        {
+          "name": "Create Scheduled Order (جديد)",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/customer/orders/scheduled",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pickup_location\": \"Algiers\",\n  \"dropoff_location\": \"Setif\",\n  \"scheduled_at\": \"2025-09-15 10:00:00\",\n  \"type\": \"ride\",\n  \"price\": 2000\n}"
+            }
+          }
+        },
+        { "name": "My Orders", "request": { "method": "GET", "url": "{{baseUrl}}/customer/orders" } },
+        { "name": "Order Details", "request": { "method": "GET", "url": "{{baseUrl}}/customer/orders/:id" } },
+        { "name": "Cancel Order", "request": { "method": "POST", "url": "{{baseUrl}}/customer/orders/:id/cancel" } },
+        {
+          "name": "Rate Order (جديد)",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/customer/orders/:id/rate",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rating\": 5,\n  \"comment\": \"Great driver, smooth trip!\"\n}"
+            }
+          }
+        }
       ]
     },
     {
       "name": "Driver",
       "item": [
-        { "name": "Available Orders", "request": { "method": "GET", "url": "/api/driver/orders" }},
-        { "name": "Accept Order", "request": { "method": "POST", "url": "/api/driver/orders/:id/accept" }},
-        { "name": "Update Status", "request": { "method": "POST", "url": "/api/driver/update-status" }},
-        { "name": "Available Parcels", "request": { "method": "GET", "url": "/api/driver/parcels" }},
-        { "name": "Nearby Requests", "request": { "method": "GET", "url": "/api/driver/requests" }},
-        { "name": "Update Order Status", "request": { "method": "POST", "url": "/api/driver/orders/:id/status" }},
-        { "name": "Update Location (جديد)", "request": { "method": "POST", "url": "/api/driver/location/update" }},
-        { "name": "Driver Ratings (جديد)", "request": { "method": "GET", "url": "/api/driver/ratings" }},
-        { "name": "Earnings History (جديد)", "request": { "method": "GET", "url": "/api/driver/earnings/history" }}
+        { "name": "Available Orders", "request": { "method": "GET", "url": "{{baseUrl}}/driver/orders" } },
+        { "name": "Accept Order", "request": { "method": "POST", "url": "{{baseUrl}}/driver/orders/:id/accept" } },
+        {
+          "name": "Update Status",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/driver/update-status",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"on_the_way\"\n}"
+            }
+          }
+        },
+        { "name": "Available Parcels", "request": { "method": "GET", "url": "{{baseUrl}}/driver/parcels" } },
+        { "name": "Nearby Requests", "request": { "method": "GET", "url": "{{baseUrl}}/driver/requests" } },
+        {
+          "name": "Update Order Status",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/driver/orders/:id/status",
+            "body": { "mode": "raw", "raw": "{\n  \"status\": \"completed\"\n}" }
+          }
+        },
+        {
+          "name": "Update Location (جديد)",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/driver/location/update",
+            "body": { "mode": "raw", "raw": "{\n  \"lat\": 36.75,\n  \"lng\": 3.06\n}" }
+          }
+        },
+        { "name": "Driver Ratings (جديد)", "request": { "method": "GET", "url": "{{baseUrl}}/driver/ratings" } },
+        { "name": "Earnings History (جديد)", "request": { "method": "GET", "url": "{{baseUrl}}/driver/earnings/history" } }
       ]
     },
     {
       "name": "Station",
       "item": [
-        { "name": "Parcels", "request": { "method": "GET", "url": "/api/station/parcels" }},
-        { "name": "Confirm Receive", "request": { "method": "POST", "url": "/api/station/confirm" }},
-        { "name": "Assign Driver", "request": { "method": "POST", "url": "/api/station/assign-driver" }}
+        { "name": "Parcels", "request": { "method": "GET", "url": "{{baseUrl}}/station/parcels" } },
+        { "name": "Confirm Receive", "request": { "method": "POST", "url": "{{baseUrl}}/station/confirm" } },
+        { "name": "Assign Driver", "request": { "method": "POST", "url": "{{baseUrl}}/station/assign-driver" } }
       ]
     },
     {
       "name": "Payments",
       "item": [
-        { "name": "Record Payment", "request": { "method": "POST", "url": "/api/payments/record" }},
-        { "name": "Refund Payment (جديد)", "request": { "method": "POST", "url": "/api/payments/refund" }},
-        { "name": "Payment History (جديد)", "request": { "method": "GET", "url": "/api/payments/history" }}
+        {
+          "name": "Record Payment",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/payments/record",
+            "body": { "mode": "raw", "raw": "{\n  \"order_id\": 10,\n  \"amount\": 1500,\n  \"method\": \"cash\"\n}" }
+          }
+        },
+        {
+          "name": "Refund Payment (جديد)",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/payments/refund",
+            "body": { "mode": "raw", "raw": "{\n  \"payment_id\": 5\n}" }
+          }
+        },
+        { "name": "Payment History (جديد)", "request": { "method": "GET", "url": "{{baseUrl}}/payments/history" } }
       ]
     },
     {
       "name": "Earnings",
       "item": [
-        { "name": "Earnings List", "request": { "method": "GET", "url": "/api/earnings" }},
-        { "name": "Earnings Summary", "request": { "method": "GET", "url": "/api/earnings/summary" }}
+        { "name": "Earnings List", "request": { "method": "GET", "url": "{{baseUrl}}/earnings" } },
+        { "name": "Earnings Summary", "request": { "method": "GET", "url": "{{baseUrl}}/earnings/summary" } }
       ]
     },
     {
       "name": "Support (جديد)",
       "item": [
-        { "name": "Create Ticket", "request": { "method": "POST", "url": "/api/support/create" }},
-        { "name": "My Tickets", "request": { "method": "GET", "url": "/api/support/my-tickets" }},
-        { "name": "Ticket Details", "request": { "method": "GET", "url": "/api/support/ticket/:id" }}
+        {
+          "name": "Create Ticket",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/support/create",
+            "body": { "mode": "raw", "raw": "{\n  \"subject\": \"Payment Issue\",\n  \"message\": \"I paid but order not confirmed.\"\n}" }
+          }
+        },
+        { "name": "My Tickets", "request": { "method": "GET", "url": "{{baseUrl}}/support/my-tickets" } },
+        { "name": "Ticket Details", "request": { "method": "GET", "url": "{{baseUrl}}/support/ticket/:id" } }
       ]
     },
     {
       "name": "Admin (جديد)",
       "item": [
-        { "name": "List Users", "request": { "method": "GET", "url": "/api/admin/users" }},
-        { "name": "Ban User", "request": { "method": "POST", "url": "/api/admin/users/:id/ban" }},
-        { "name": "List Orders", "request": { "method": "GET", "url": "/api/admin/orders" }},
-        { "name": "List Payments", "request": { "method": "GET", "url": "/api/admin/payments" }},
-        { "name": "Reports", "request": { "method": "GET", "url": "/api/admin/reports" }}
+        { "name": "List Users", "request": { "method": "GET", "url": "{{baseUrl}}/admin/users" } },
+        { "name": "Ban User", "request": { "method": "POST", "url": "{{baseUrl}}/admin/users/:id/ban" } },
+        { "name": "List Orders", "request": { "method": "GET", "url": "{{baseUrl}}/admin/orders" } },
+        { "name": "List Payments", "request": { "method": "GET", "url": "{{baseUrl}}/admin/payments" } },
+        { "name": "Reports", "request": { "method": "GET", "url": "{{baseUrl}}/admin/reports" } }
       ]
     },
     {
       "name": "Notifications (جديد)",
       "item": [
-        { "name": "Get Notifications", "request": { "method": "GET", "url": "/api/notifications" }},
-        { "name": "Mark as Read", "request": { "method": "POST", "url": "/api/notifications/mark-read" }}
+        { "name": "Get Notifications", "request": { "method": "GET", "url": "{{baseUrl}}/notifications" } },
+        { "name": "Mark as Read", "request": { "method": "POST", "url": "{{baseUrl}}/notifications/mark-read" } }
       ]
     }
   ]
